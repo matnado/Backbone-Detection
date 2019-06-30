@@ -362,23 +362,24 @@ def Backbone_detection(path_in = 'DATASET/Example_PrimarySchool/', name_file='pr
 	path_out = path_in+directory_out
 	os.system("mkdir	"+path_out)
 	
-	if model=='EADM_Accuracy' or model=='TFM':
-		myfile_relative_error = open(path_out+'/relative_error_'+model+'.txt','w')
+	
 
 	for i in range(len(dt)):
 		myfile_links = open(path_out+'/links_'+str(int(dt[i]))+'_'+model+'.txt','w')
 		
+		if model=='EADM_BB_Accuracy' or model=='EADM_I_Accuracy' or model=='TFM':
+			myfile_relative_error = open(path_out+'/relative_error_'+str(int(dt[i]))+'_'+model+'.txt','w')
 		
 		x, N = Read_file(path_in, name_file, multiedges[i], dt[i], column_time, sep, remove_nights)
 		Net = Network(N, x)
 		Net.weights_links(x)
 		
-		if model=='EADM_BB' or model=='EADM_Accuracy':
+		if model=='EADM_BB' or model=='EADM_BB_Accuracy':
 			Net.Bayesian(x)
-		elif model=='EADM_I':
+		elif model=='EADM_I' or model=='EADM_I_Accuracy':
 			Net.Find_Intervals(x, N_I)
 		
-		if model=='EADM_Accuracy':
+		if model=='EADM_BB_Accuracy' or model=='EADM_I_Accuracy':
 			Net.compute_weEADM_Accuracy(x) 
 			Relative_error_weEADM_Accuracy(Net, myfile_relative_error, dt[i])
 		elif model=='EADM_BB' or model=='EADM_I':
@@ -392,11 +393,11 @@ def Backbone_detection(path_in = 'DATASET/Example_PrimarySchool/', name_file='pr
 			Net.compute_expected_weigths_TFM()
 			Relative_error_weTFM(Net, myfile_relative_error, dt[i])
 		else:
-			sys.exit('These are the acceptable keywords: TFM, SVN, EADM_BB, EADM_I, or EADM_Accuracy. In the ReadMe file we explain their meaning')
+			sys.exit('These are the acceptable keywords: TFM, SVN, EADM_BB, EADM_I, EADM_I_Accuracy, or EADM_BB_Accuracy. In the ReadMe file we explain their meaning')
 			
 		for j in range(len(alpha)):	
 			myfile_edgelist = open(path_out+'/edgelist_'+str(int(dt[i]))+'_'+str(alpha[j])+'_'+model+'.txt','w')
-			if model=='EADM_Accuracy':
+			if model=='EADM_BB_Accuracy' or model=='EADM_I_Accuracy':
 				links_EADM(Net, myfile_links, myfile_edgelist, alpha[j], Bonferroni_corr, dt[i])
 			elif model=='EADM_BB' or model=='EADM_I':
 				links_EADM(Net, myfile_links, myfile_edgelist, alpha[j], Bonferroni_corr, dt[i])
@@ -405,7 +406,7 @@ def Backbone_detection(path_in = 'DATASET/Example_PrimarySchool/', name_file='pr
 			elif model=='TFM':	
 				links_TFM(Net, myfile_links, myfile_edgelist, alpha[j], Bonferroni_corr, dt[i])
 			else:
-				sys.exit('These are the acceptable keywords: TFM, SVN, EADM_BB, EADM_I, or EADM_Accuracy. In the ReadMe file we explain their meaning')
+				sys.exit('These are the acceptable keywords: TFM, SVN, EADM_BB, EADM_I, EADM_I_Accuracy, or EADM_BB_Accuracy. In the ReadMe file we explain their meaning')
 			
 		 	myfile_edgelist.close()
 		 	
@@ -413,8 +414,8 @@ def Backbone_detection(path_in = 'DATASET/Example_PrimarySchool/', name_file='pr
 		
 		
 	
-	if model=='EADM_Accuracy' or model=='TFM':
-		myfile_relative_error.close()
+		if model=='EADM_BB_Accuracy' or model=='EADM_I_Accuracy' or model=='TFM':
+			myfile_relative_error.close()
 	
 	elapsed = time.time() - time_start
 	print "cpu time: ", elapsed

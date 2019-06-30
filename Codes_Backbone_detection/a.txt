@@ -1,3 +1,0 @@
-Splitpath: 186,173,118,92,88,43,37,28,13,0,
-
-"./oksPublic/oksPublic/binrt/oksm -i ./oksPublic/oksPublic/dataset/time_series.csv -n 208 -c 10 -t 1 -o ./ ", ./oksPublic/oksPublic/binrt/oksm, ./oksPublic/oksPublic/dataset/time_series.csv, 208, 10, 12
